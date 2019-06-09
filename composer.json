@@ -1,5 +1,5 @@
 {
-    "name": "tomorrow-ideas/plaid-sdk-php",
+    "name": "kgdiem/plaid-sdk-php",
     "description": "PHP implementation of Plaid's API as an SDK.",
     "type": "library",
     "require": {
@@ -10,7 +10,7 @@
     },
     "autoload": {
         "psr-4": {
-            "TomorrowIdeas\\Plaid\\" : "src"
+            "kgdiem\\Plaid\\" : "src"
         }
     },
     "require-dev": {
@@ -20,7 +20,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "TomorrowIdeas\\Plaid\\Tests\\": "tests"
+            "kgdiem\\Plaid\\Tests\\": "tests"
         }
     },
     "license": "MIT",
@@ -28,6 +28,10 @@
         {
             "name": "Brent Scheffler",
             "email": "brent@tomorrow.me"
+        },
+        {
+            "name": "Kevin Diem",
+            "email": "kevin@kevindiem.com"
         }
     ]
 }
