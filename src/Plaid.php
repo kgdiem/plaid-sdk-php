@@ -2,10 +2,10 @@
 
 namespace TomorrowIdeas\Plaid;
 
-use Capsule\Request;
 use DateTime;
-use Psr\Http\Client\ClientInterface;
-use Shuttle\Shuttle;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use \GuzzleHttp\Psr7\Request;
 
 final class Plaid
 {
@@ -81,6 +81,7 @@ final class Plaid
      * @param string $public_key
      * @param string $environment
      * @param string $version
+     * @throws PlaidException
      */
     public function __construct(string $client_id, string $secret, string $public_key, string $environment = "production", string $version = "2018-05-22")
     {
@@ -99,6 +100,7 @@ final class Plaid
      *
      * @param string $environment
      * @return void
+     * @throws PlaidException
      */
     public function setEnvironment(string $environment): void
     {
@@ -125,6 +127,7 @@ final class Plaid
      * Possible values: "2017-03-08", "2018-05-22", "2019-05-29"
      *
      * @param string $version
+     * @throws PlaidException
      */
     public function setVersion(string $version): void
     {
@@ -175,7 +178,7 @@ final class Plaid
     private function getHttpClient(): ClientInterface
     {
         if( empty($this->httpClient) ){
-            $this->httpClient = new Shuttle;
+            $this->httpClient = new Client();
         }
 
         return $this->httpClient;
@@ -186,10 +189,11 @@ final class Plaid
      *
      * @param Request $request
      * @return object
+     * @throws
      */
     private function doRequest(Request $request): object
     {
-        $response = $this->getHttpClient()->sendRequest($request);
+        $response = $this->getHttpClient()->send($request);
 
         if( $response->getStatusCode() < 200 || $response->getStatusCode() >= 300 ){
             throw new PlaidRequestException($response);
@@ -211,11 +215,11 @@ final class Plaid
         return new Request(
             $method,
             ($this->getHostname($this->environment) ?? "") . $path,
-            \json_encode($params),
             [
                 "Plaid-Version" => $this->version,
                 "Content-Type" => "application/json"
-            ]
+            ],
+            \json_encode($params)
         );
     }
 
@@ -250,6 +254,7 @@ final class Plaid
      * Get all Plaid categories.
      *
      * @return object
+     * @throws PlaidRequestException
      */
     public function getCategories(): object
     {
@@ -264,6 +269,7 @@ final class Plaid
      * @param string $access_token
      * @param array $options
      * @return object
+     * @throws PlaidRequestException
      */
     public function getAuth(string $access_token, array $options = []): object
     {
@@ -277,6 +283,7 @@ final class Plaid
      *
      * @param string $access_token
      * @return object
+     * @throws PlaidRequestException
      */
     public function getItem(string $access_token): object
     {
@@ -290,6 +297,7 @@ final class Plaid
      *
      * @param string $access_token
      * @return object
+     * @throws PlaidRequestException
      */
     public function removeItem(string $access_token): object
     {
@@ -303,6 +311,7 @@ final class Plaid
      *
      * @param string $access_token
      * @return object
+     * @throws PlaidRequestException
      */
     public function createPublicToken(string $access_token): object
     {
@@ -316,6 +325,7 @@ final class Plaid
      *
      * @param string $public_token
      * @return object
+     * @throws PlaidRequestException
      */
     public function exchangeToken(string $public_token): object
     {
@@ -329,6 +339,7 @@ final class Plaid
      *
      * @param string $access_token
      * @return object
+     * @throws PlaidRequestException
      */
     public function rotateAccessToken(string $access_token): object
     {
@@ -343,6 +354,7 @@ final class Plaid
      * @param string $access_token
      * @param string $webhook
      * @return object
+     * @throws PlaidRequestException
      */
     public function updateWebhook(string $access_token, string $webhook): object
     {
@@ -356,6 +368,7 @@ final class Plaid
      *
      * @param string $access_token
      * @return object
+     * @throws PlaidRequestException
      */
     public function getAccounts(string $access_token): object
     {
@@ -370,6 +383,7 @@ final class Plaid
      * @param string $institution_id
      * @param array<string, string> $options
      * @return object
+     * @throws PlaidRequestException
      */
     public function getInstitution(string $institution_id, array $options = []): object
     {
@@ -390,6 +404,7 @@ final class Plaid
      * @param integer $offset
      * @param array<string, string> $options
      * @return object
+     * @throws PlaidRequestException
      */
     public function getInstitutions(int $count, int $offset, array $options = []): object
     {
@@ -411,6 +426,7 @@ final class Plaid
      * @param array<string> $products
      * @param array<string, string> $options
      * @return object
+     * @throws PlaidRequestException
      */
     public function findInstitution(string $query, array $products, array $options = []): object
     {
@@ -433,6 +449,7 @@ final class Plaid
      * @param DateTime $end_date
      * @param array<string, string> $options
      * @return object
+     * @throws PlaidRequestException
      */
     public function getTransactions(string $access_token, DateTime $start_date, DateTime $end_date, array $options = []): object
     {
@@ -454,6 +471,7 @@ final class Plaid
      * @param string $access_token
      * @param array<string, string> $options
      * @return object
+     * @throws PlaidRequestException
      */
     public function getBalance(string $access_token, array $options = []): object
     {
@@ -467,6 +485,7 @@ final class Plaid
      *
      * @param string $access_token
      * @return object
+     * @throws PlaidRequestException
      */
     public function getIdentity(string $access_token): object
     {
@@ -480,6 +499,7 @@ final class Plaid
      *
      * @param string $access_token
      * @return object
+     * @throws PlaidRequestException
      */
     public function getIncome(string $access_token): object
     {

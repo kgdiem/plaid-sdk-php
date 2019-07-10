@@ -2,33 +2,31 @@
 
 namespace TomorrowIdeas\Plaid\Tests;
 
-use Capsule\Request;
-use Capsule\Response;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
-use Shuttle\Handler\MockHandler;
-use Shuttle\Shuttle;
 use TomorrowIdeas\Plaid\Plaid;
-
+use GuzzleHttp\Client;
+use \GuzzleHttp\Psr7\Request;
+use \GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Handler\MockHandler;
 
 class TestCase extends PHPUnitTestCase
 {
     protected function getPlaidClient(): Plaid
     {
-        $httpClient = new Shuttle([
+        $httpClient = new Client([
             'handler' => new MockHandler([
                 function(Request $request) {
-
                     $requestParams = [
                         "method" => $request->getMethod(),
-                        "version" => $request->getHeaderLine("Plaid-Version"),
-                        "content" => $request->getHeaderLine("Content-Type"),
+                        "version" => "Plaid-Version: " . $request->getHeaderLine("Plaid-Version"),
+                        "content" => "Content-Type: " . $request->getHeaderLine("Content-Type"),
                         "scheme" => $request->getUri()->getScheme(),
                         "host" => $request->getUri()->getHost(),
                         "path" => $request->getUri()->getPath(),
                         "params" => \json_decode($request->getBody()->getContents()),
                     ];
 
-                    return new Response(200, \json_encode($requestParams));
+                    return new Response(200, [], \json_encode($requestParams));
 
                 }
             ])

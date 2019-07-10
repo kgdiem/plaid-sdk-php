@@ -2,13 +2,13 @@
 
 namespace TomorrowIdeas\Plaid\Tests;
 
-use Capsule\Request;
-use Capsule\Response;
-use Shuttle\Handler\MockHandler;
-use Shuttle\Shuttle;
 use TomorrowIdeas\Plaid\Plaid;
 use TomorrowIdeas\Plaid\PlaidException;
 use TomorrowIdeas\Plaid\PlaidRequestException;
+use GuzzleHttp\Client;
+use \GuzzleHttp\Psr7\Request;
+use \GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Handler\MockHandler;
 
 /**
  * @covers TomorrowIdeas\Plaid\Plaid
@@ -102,7 +102,7 @@ class PlaidClientTest extends TestCase
 
     public function test_1xx_responses_throw_exception()
     {
-        $httpClient = new Shuttle([
+        $httpClient = new Client([
             'handler' => new MockHandler([
                 function(Request $request) {
 
@@ -116,7 +116,7 @@ class PlaidClientTest extends TestCase
                         "params" => \json_decode($request->getBody()->getContents()),
                     ];
 
-                    return new Response(100, \json_encode($requestParams));
+                    return new Response(100, [], \json_encode($requestParams));
 
                 }
             ])
@@ -131,7 +131,7 @@ class PlaidClientTest extends TestCase
 
     public function test_3xx_responses_an_above_throw_exception()
     {
-        $httpClient = new Shuttle([
+        $httpClient = new Client([
             'handler' => new MockHandler([
                 function(Request $request) {
 
@@ -139,7 +139,7 @@ class PlaidClientTest extends TestCase
                         "display_message" => "PLAID_ERROR",
                     ];
 
-                    return new Response(300, \json_encode($requestParams));
+                    return new Response(300, [], \json_encode($requestParams));
 
                 }
             ])
@@ -154,7 +154,7 @@ class PlaidClientTest extends TestCase
 
     public function test_request_exception_passes_through_plaid_display_message()
     {
-        $httpClient = new Shuttle([
+        $httpClient = new Client([
             'handler' => new MockHandler([
                 function(Request $request) {
 
@@ -162,7 +162,7 @@ class PlaidClientTest extends TestCase
                         "display_message" => "DISPLAY MESSAGE",
                     ];
 
-                    return new Response(300, \json_encode($requestParams));
+                    return new Response(300, [], \json_encode($requestParams));
 
                 }
             ])
@@ -183,7 +183,7 @@ class PlaidClientTest extends TestCase
 
     public function test_request_exception_passes_through_http_status_code()
     {
-        $httpClient = new Shuttle([
+        $httpClient = new Client([
             'handler' => new MockHandler([
                 function(Request $request) {
 
@@ -191,7 +191,7 @@ class PlaidClientTest extends TestCase
                         "display_message" => "DISPLAY MESSAGE",
                     ];
 
-                    return new Response(300, \json_encode($requestParams));
+                    return new Response(300, [], \json_encode($requestParams));
 
                 }
             ])
