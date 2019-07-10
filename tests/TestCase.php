@@ -16,11 +16,10 @@ class TestCase extends PHPUnitTestCase
         $httpClient = new Client([
             'handler' => new MockHandler([
                 function(Request $request) {
-
                     $requestParams = [
                         "method" => $request->getMethod(),
-                        "version" => $request->getHeaderLine("Plaid-Version"),
-                        "content" => $request->getHeaderLine("Content-Type"),
+                        "version" => "Plaid-Version: " . $request->getHeaderLine("Plaid-Version"),
+                        "content" => "Content-Type: " . $request->getHeaderLine("Content-Type"),
                         "scheme" => $request->getUri()->getScheme(),
                         "host" => $request->getUri()->getHost(),
                         "path" => $request->getUri()->getPath(),
