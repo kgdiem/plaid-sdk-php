@@ -165,7 +165,7 @@ final class Plaid
      * @param ClientInterface $clientInterface
      * @return void
      */
-    public function setHttpClient(ClientInterface $clientInterface): void
+    public function setHttpClient(ClientInterface $clientInterface)
     {
         $this->httpClient = $clientInterface;
     }
@@ -188,10 +188,10 @@ final class Plaid
      * Process the request and decode response as JSON.
      *
      * @param Request $request
-     * @return object
+     * @return stdClass
      * @throws
      */
-    private function doRequest(Request $request): object
+    private function doRequest(Request $request): \stdClass
     {
         $response = $this->getHttpClient()->send($request);
 
@@ -253,10 +253,10 @@ final class Plaid
     /**
      * Get all Plaid categories.
      *
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
-    public function getCategories(): object
+    public function getCategories(): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "categories/get")
@@ -268,13 +268,14 @@ final class Plaid
      *
      * @param string $access_token
      * @param array $options
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function getAuth(string $access_token, array $options = []): \stdClass
     {
         return $this->doRequest(
-            $this->buildRequest("post", "auth/get", $this->clientCredentials(["access_token" => $access_token, "options" => (object) $options]))
+            $this->buildRequest("post", "auth/get", $this->clientCredentials(["access_token" => $access_token, "options" =>
+                $options]))
         );
     }
 
@@ -282,7 +283,7 @@ final class Plaid
      * Get an Item.
      *
      * @param string $access_token
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function getItem(string $access_token): \stdClass
@@ -296,7 +297,7 @@ final class Plaid
      * Remove an Item.
      *
      * @param string $access_token
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function removeItem(string $access_token): \stdClass
@@ -310,7 +311,7 @@ final class Plaid
      * Create a new Item public token.
      *
      * @param string $access_token
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function createPublicToken(string $access_token): \stdClass
@@ -324,7 +325,7 @@ final class Plaid
      * Exchange an Item public token for an access token.
      *
      * @param string $public_token
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function exchangeToken(string $public_token): \stdClass
@@ -338,7 +339,7 @@ final class Plaid
      * Rotate an Item's access token.
      *
      * @param string $access_token
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function rotateAccessToken(string $access_token): \stdClass
@@ -353,7 +354,7 @@ final class Plaid
      *
      * @param string $access_token
      * @param string $webhook
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function updateWebhook(string $access_token, string $webhook): \stdClass
@@ -367,7 +368,7 @@ final class Plaid
      * Get all Accounts.
      *
      * @param string $access_token
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function getAccounts(string $access_token): \stdClass
@@ -382,14 +383,14 @@ final class Plaid
      *
      * @param string $institution_id
      * @param array<string, string> $options
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function getInstitution(string $institution_id, array $options = []): \stdClass
     {
         $params = [
             "institution_id" => $institution_id,
-            "options" => (object) $options
+            "options" => $options
         ];
 
         return $this->doRequest(
@@ -403,7 +404,7 @@ final class Plaid
      * @param integer $count
      * @param integer $offset
      * @param array<string, string> $options
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function getInstitutions(int $count, int $offset, array $options = []): \stdClass
@@ -411,7 +412,7 @@ final class Plaid
         $params = [
             "count" => $count,
             "offset" => $offset,
-            "options" => (object) $options
+            "options" => $options
         ];
 
         return $this->doRequest(
@@ -425,7 +426,7 @@ final class Plaid
      * @param string $query
      * @param array<string> $products
      * @param array<string, string> $options
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function findInstitution(string $query, array $products, array $options = []): \stdClass
@@ -433,7 +434,7 @@ final class Plaid
         $params = [
             "query" => $query,
             "products" => $products,
-            "options" => (object) $options
+            "options" => $options
         ];
 
         return $this->doRequest(
@@ -448,7 +449,7 @@ final class Plaid
      * @param DateTime $start_date
      * @param DateTime $end_date
      * @param array<string, string> $options
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function getTransactions(string $access_token, DateTime $start_date, DateTime $end_date, array $options = []): \stdClass
@@ -457,7 +458,7 @@ final class Plaid
             "access_token" => $access_token,
             "start_date" => $start_date->format("Y-m-d"),
             "end_date" => $end_date->format("Y-m-d"),
-            "options" => (object) $options
+            "options" => $options
         ];
 
         return $this->doRequest(
@@ -470,13 +471,13 @@ final class Plaid
      *
      * @param string $access_token
      * @param array<string, string> $options
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function getBalance(string $access_token, array $options = []): \stdClass
     {
         return $this->doRequest(
-            $this->buildRequest("post", "accounts/balance/get", $this->clientCredentials(["access_token" => $access_token, "options" => (object) $options]))
+            $this->buildRequest("post", "accounts/balance/get", $this->clientCredentials(["access_token" => $access_token, "options" => $options]))
         );
     }
 
@@ -484,7 +485,7 @@ final class Plaid
      * Get Account identity information.
      *
      * @param string $access_token
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function getIdentity(string $access_token): \stdClass
@@ -498,7 +499,7 @@ final class Plaid
      * Get an Item's income information.
      *
      * @param string $access_token
-     * @return object
+     * @return stdClass
      * @throws PlaidRequestException
      */
     public function getIncome(string $access_token): \stdClass
