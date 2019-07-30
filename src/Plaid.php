@@ -271,7 +271,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function getAuth(string $access_token, array $options = []): object
+    public function getAuth(string $access_token, array $options = []): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "auth/get", $this->clientCredentials(["access_token" => $access_token, "options" => (object) $options]))
@@ -285,7 +285,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function getItem(string $access_token): object
+    public function getItem(string $access_token): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "item/get", $this->clientCredentials(["access_token" => $access_token]))
@@ -299,7 +299,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function removeItem(string $access_token): object
+    public function removeItem(string $access_token): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "item/remove", $this->clientCredentials(["access_token" => $access_token]))
@@ -313,7 +313,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function createPublicToken(string $access_token): object
+    public function createPublicToken(string $access_token): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "item/public_token/create", $this->clientCredentials(["access_token" => $access_token]))
@@ -327,7 +327,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function exchangeToken(string $public_token): object
+    public function exchangeToken(string $public_token): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "item/public_token/exchange", $this->clientCredentials(["public_token" => $public_token]))
@@ -341,7 +341,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function rotateAccessToken(string $access_token): object
+    public function rotateAccessToken(string $access_token): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "item/access_token/invalidate", $this->clientCredentials(["access_token" => $access_token]))
@@ -356,7 +356,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function updateWebhook(string $access_token, string $webhook): object
+    public function updateWebhook(string $access_token, string $webhook): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "item/webhook/update", $this->clientCredentials(["access_token" => $access_token, "webhook" => $webhook]))
@@ -370,7 +370,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function getAccounts(string $access_token): object
+    public function getAccounts(string $access_token): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "accounts/get", $this->clientCredentials(["access_token" => $access_token]))
@@ -385,7 +385,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function getInstitution(string $institution_id, array $options = []): object
+    public function getInstitution(string $institution_id, array $options = []): \stdClass
     {
         $params = [
             "institution_id" => $institution_id,
@@ -406,7 +406,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function getInstitutions(int $count, int $offset, array $options = []): object
+    public function getInstitutions(int $count, int $offset, array $options = []): \stdClass
     {
         $params = [
             "count" => $count,
@@ -428,7 +428,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function findInstitution(string $query, array $products, array $options = []): object
+    public function findInstitution(string $query, array $products, array $options = []): \stdClass
     {
         $params = [
             "query" => $query,
@@ -451,7 +451,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function getTransactions(string $access_token, DateTime $start_date, DateTime $end_date, array $options = []): object
+    public function getTransactions(string $access_token, DateTime $start_date, DateTime $end_date, array $options = []): \stdClass
     {
         $params = [
             "access_token" => $access_token,
@@ -473,7 +473,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function getBalance(string $access_token, array $options = []): object
+    public function getBalance(string $access_token, array $options = []): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "accounts/balance/get", $this->clientCredentials(["access_token" => $access_token, "options" => (object) $options]))
@@ -487,7 +487,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function getIdentity(string $access_token): object
+    public function getIdentity(string $access_token): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "identity/get", $this->clientCredentials(["access_token" => $access_token]))
@@ -501,7 +501,7 @@ final class Plaid
      * @return object
      * @throws PlaidRequestException
      */
-    public function getIncome(string $access_token): object
+    public function getIncome(string $access_token): \stdClass
     {
         return $this->doRequest(
             $this->buildRequest("post", "income/get", $this->clientCredentials(["access_token" => $access_token]))
